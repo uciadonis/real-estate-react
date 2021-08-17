@@ -184,7 +184,8 @@ function Hero({ slides }) {
                                         css={`
                                             max-width: 160px;
                                         `}>
-                                        View Home
+                                        { slide.label }
+                                        <Arrow />
                                     </Button>
                                 </HeroContent>                                
                             </HeroSlider>
