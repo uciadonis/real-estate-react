@@ -1,8 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react'
-import styled, { css } from 'styled-components/macro'
+import styled, { css, keyframes } from 'styled-components/macro'
 import { Button } from './Button'
 import { IoMdArrowRoundForward } from 'react-icons/io'
 import { IoArrowForward, IoArrowBack } from 'react-icons/io5'
+
+const slideIn = keyframes`
+    10% {
+        transform: translateX(0px);
+    }
+    100% {
+        transform: translateX(-10px);
+    }
+`
 
 const HeroSection = styled.section`
     height: 100vh;
@@ -22,9 +31,15 @@ const HeroWrapper = styled.div`
 `
 
 const HeroSlide = styled.div`
-    z-index: 1;
     width: 100%;
     height: 100%;
+    z-index: 1;
+    opacity: 0.85;
+    transition: opacity ease-in-out 0.1s;
+
+    &.active-anim {
+        opacity: 1;
+    }
 `
 const HeroSlider = styled.div`
     position: absolute;
@@ -34,7 +49,7 @@ const HeroSlider = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;    
 
     &::before {
         content: '';
@@ -55,12 +70,16 @@ const HeroSlider = styled.div`
     }
 `
 const HeroImage = styled.img`
-     position: absolute;
-     top: 0;
-     left: 0;
-     width: 100vw;
-     height: 100vh;
-     object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100vw + 20px);
+    height: 100vh;
+    object-fit: cover;
+
+    &.active-anim {
+        animation: ${ slideIn } 0.1s cubic-bezier(.2,.65,.77,.7) 0s 1 normal forwards;
+    }
 `
 
 const HeroContent = styled.div`
@@ -134,7 +153,7 @@ function Hero({ slides }) {
             setCurrent(current => (current === length - 1 ? 0 : current + 1))
         }
 
-        timeout.current = setTimeout(nextSlide, 3000)
+        timeout.current = setTimeout(nextSlide, 5000)
 
         return () => {
             // cleanup
@@ -148,18 +167,14 @@ function Hero({ slides }) {
         if (timeout.current) {
             clearTimeout(timeout.current)
         }
-
         setCurrent(current === length - 1 ? 0 : current + 1)
-        // console.log(current)
     }
 
     const prevSlide = () => {
         if (timeout.current) {
             clearTimeout(timeout.current)
         }
-
         setCurrent(current === 0 ? length - 1 : current - 1)
-        // console.log(current)
     }
 
     if (!Array.isArray(slides) || slides.length<= 0) {
@@ -171,23 +186,22 @@ function Hero({ slides }) {
             <HeroWrapper>
                 {slides.map((slide, index) => {
                     return (
-                        <HeroSlide key={ index }>
+                        <HeroSlide key={ index } className={index === current ? "active-anim" : ""}>
                             {index === current && (
-                                <HeroSlider>
-                                <HeroImage src={ slide.image } alt={ slide.alt }/>
+                            <HeroSlider>
+                                <HeroImage src={ slide.image } alt={ slide.alt } 
+                                    className={index === current ? "active-anim" : ""}/>
                                 <HeroContent>
                                     <h1>{ slide.title }</h1>
                                     <p>{ slide.price }</p>
                                     <Button 
-                                        to={ slide.path } 
-                                        primary='true'
-                                        css={`
-                                            max-width: 160px;
-                                        `}>
+                                            to={ slide.path } 
+                                            primary='true'
+                                            css={` max-width: 160px; `}>
                                         { slide.label }
                                         <Arrow />
                                     </Button>
-                                </HeroContent>                                
+                                </HeroContent>
                             </HeroSlider>
                             )}
                         </HeroSlide>
@@ -198,7 +212,7 @@ function Hero({ slides }) {
                     <NextArrow onClick={ nextSlide } />
                 </SliderButtons>
             </HeroWrapper>
-        </HeroSection>            
+        </HeroSection>   
     )
 }
 
