@@ -5,12 +5,9 @@ import { IoMdArrowRoundForward } from 'react-icons/io'
 import { IoArrowForward, IoArrowBack } from 'react-icons/io5'
 
 const slideIn = keyframes`
-    10% {
-        transform: translateX(0px);
-    }
-    100% {
-        transform: translateX(-10px);
-    }
+    0% { transform: translateX(0px); }
+    10% { transform: translateX(0px); }
+    100% { transform: translateX(-10px); }
 `
 
 const HeroSection = styled.section`
@@ -34,7 +31,7 @@ const HeroSlide = styled.div`
     width: 100%;
     height: 100%;
     z-index: 1;
-    opacity: 0.85;
+    opacity: 0.90;
     transition: opacity ease-in-out 0.1s;
 
     &.active-anim {
@@ -78,7 +75,8 @@ const HeroImage = styled.img`
     object-fit: cover;
 
     &.active-anim {
-        animation: ${ slideIn } 0.1s cubic-bezier(.2,.65,.77,.7) 0s 1 normal forwards;
+        animation: ${ slideIn } 40ms cubic-bezier(.2,.65,.77,.7) 0s 1 normal forwards;
+        -webkit-animation: ${ slideIn } 250ms cubic-bezier(.2,.65,.77,.7) 0s 1 normal forwards;
     }
 `
 
@@ -187,7 +185,7 @@ function Hero({ slides }) {
                 {slides.map((slide, index) => {
                     return (
                         <HeroSlide key={ index } className={index === current ? "active-anim" : ""}>
-                            {index === current && (
+                            { index === current && (
                             <HeroSlider>
                                 <HeroImage src={ slide.image } alt={ slide.alt } 
                                     className={index === current ? "active-anim" : ""}/>

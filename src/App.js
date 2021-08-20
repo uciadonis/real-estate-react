@@ -21,7 +21,7 @@ function App() {
 		<Navbar toggle={ toggle } />
 		<Dropdown isOpen={isOpen} toggle={ toggle }/>
 		<Hero slides={ SliderData }/>
-		<InfoSection { ...InfoData }/>
+		<InfoSection info={ InfoData }/>
     </>
   );
 }

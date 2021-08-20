@@ -4,14 +4,13 @@ import { Button } from './Button'
 
 const Section = styled.section`
     width: 100%;
-    height: 100%;
     padding: 4rem 0rem;
 `
 const Container = styled.div`
     padding: 3rem calc((100vw- 1300px) / 2);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 800px;
+    /*grid-template-rows: 800px;*/
 
     @media screen and (max-width: 768px) {
         grid-template-columns: 1fr;
@@ -60,29 +59,24 @@ const ColumnRight = styled.div`
     }
 `
 
-const InfoSection = ({
-    heading,
-    paragraphOne,
-    paragraphTwo,
-    buttonLabel,
-    reverse,
-    image
-}) => {
+const InfoSection = ({ info }) => {
     return (
         <Section>
+        { info.map((item, _ ) => (
             <Container>
-                <ColumnLeft>
-                    <h1>{ heading }</h1>
-                    <p>{ paragraphOne }</p>
-                    <p>{ paragraphTwo }</p>
+                <ColumnLeft reverse={ item.reverse }>
+                    <h1>{ item.heading }</h1>
+                    <p>{ item.paragraphOne }</p>
+                    <p>{ item.paragraphTwo }</p>
                     <Button to='/homes' primary='true'>
-                        { buttonLabel }
+                        { item.buttonLabel }
                     </Button>
                 </ColumnLeft>
-                <ColumnRight>
-                    <img src={ image } alt="home" />
+                <ColumnRight reverse={ item.reverse }>
+                    <img src={ item.image } alt="home" />
                 </ColumnRight>
             </Container>
+        ))}
         </Section>
     )
 }
